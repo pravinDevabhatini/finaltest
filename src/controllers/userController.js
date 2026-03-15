@@ -1,4 +1,5 @@
 const { IST, refundDeadline } = require('../utils/helpers');
+const User=require('../models/User')
 
 let USERS = [
   { id:1,  refId:'CC001', name:'Rajesh Kumar',  email:'rajesh@cc.in',   mobile:'98765 43210', bankName:'SBI',   accountNumber:'1234567890', ifsc:'SBIN0001234', branch:'Hyd Main',    pan:'ABCDE1234F', aadhar:'1234-5678-9012', address:'Flat 101, Green Towers, Hyderabad', whatsappOptIn:true,  whatsappNumber:'919876543210', status:'active', group:'T1',  role:'user', joinedDate:'01 Jan 2024', refundRequests:[] },
@@ -13,11 +14,14 @@ let USERS = [
   { id:10, refId:'CC010', name:'Meena Iyer',    email:'meena@cc.in',    mobile:'98765 43219', bankName:'Kotak', accountNumber:'1122334455', ifsc:'KKBK0005678', branch:'Financial Dist',pan:'FGHIJ6789K',aadhar:'0123-4567-8901', address:'Villa 2, Financial District',         whatsappOptIn:false, whatsappNumber:'',             status:'active', group:'CR1', role:'user', joinedDate:'01 Jun 2024', refundRequests:[] },
 ];
 
-exports.getUsers    = (req, res) => {
+exports.getUsers    = async (req, res) => {
   let r = [...USERS];
-  if (req.query.group)  r = r.filter(u => u.group === req.query.group);
-  if (req.query.status) r = r.filter(u => u.status === req.query.status);
-  if (req.query.role)   r = r.filter(u => u.role === req.query.role);
+  const users=await User.find();
+  console.log(users)
+  r=[...users];
+  // if (req.query.group)  r = r.filter(u => u.group === req.query.group);
+  // if (req.query.status) r = r.filter(u => u.status === req.query.status);
+  // if (req.query.role)   r = r.filter(u => u.role === req.query.role);
   res.json({ success:true, count:r.length, users:r, ts:IST() });
 };
 
